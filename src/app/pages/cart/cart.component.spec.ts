@@ -204,6 +204,45 @@ describe('Cart component', () => {
 
 
 
+  // probando un metodo privado
+  // a tener en cuenta: un metodo privado no debe ser
+  // probado directamente.
+  test('onClearBooks() works correctly', () => {
+
+      const spy1 = jest.spyOn(service,'removeBooksFromCart').mockImplementation( () => null);
+
+      // espiando un metodo privado. En muchos casos toca hacer esto
+      // cuando es privado.
+      const spy2 = jest.spyOn(componentCar as any, '_clearListCartBook');
+
+      componentCar.listCartBook = listBookTest;
+      componentCar.onClearBooks();
+      expect(componentCar.listCartBook.length).toBe(0);
+
+      expect(spy1).toHaveBeenCalledTimes(1);
+      expect(spy2).toHaveBeenCalledTimes(1);
+  });
+
+
+  /**  ya el metodo está probado, sin embargo esta es otra forma
+  // de probar un metodo privado. Aunque esta forma no es tan
+  // recomendable.
+
+  test('clearListCartBook works correctly', () => {
+      const spy1 = jest.spyOn(service, 'removeBooksFromCart').mockImplementation( () => null);
+      componentCar.listCartBook = listBookTest;
+      componentCar['_clearListCartBook']();
+      expect(componentCar.listCartBook.length).toBe(0);
+      expect(spy1).toHaveBeenCalledTimes(1);
+  });
+*/
+
+test('onClearBooks() works correctly with listbook is empty', () => {
+      componentCar.listCartBook = [];
+      componentCar.onClearBooks();
+      expect(componentCar.listCartBook.length === 0 ).toBe(true);
+});
+
 
 
 });
