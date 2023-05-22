@@ -39,7 +39,7 @@ const listBookTest: Book[] = [{
   amount: 10
 }
 
-]
+];
 
 describe('Cart component', () => {
   let componentCar: CartComponent;
