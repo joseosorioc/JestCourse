@@ -44,6 +44,7 @@ const listBookTest: Book[] = [{
 describe('Cart component', () => {
   let componentCar: CartComponent;
   let fixture: ComponentFixture<CartComponent> ;
+  let service: BookService;
 
   beforeEach( () => {
     // esto muy similar a los modulos, mas como de configuracion.
@@ -73,6 +74,7 @@ describe('Cart component', () => {
     fixture = TestBed.createComponent(CartComponent);
     componentCar = fixture.componentInstance;
     fixture.detectChanges();
+    service = fixture.debugElement.injector.get(BookService);
   })
 
   // first test
@@ -92,6 +94,113 @@ describe('Cart component', () => {
   });
 
 
+
+  test('should test onInputTotalPrice increment correctly', () => {
+    let action = 'plus';
+    const myBook: Book = {
+      id: "id1223",
+      name: "libro1",
+      author: "",
+      isbn: "isbn-prueba",
+      description: "this description",
+      photoUrl: "http://myurl.com",
+      price: 200,
+      amount: 2
+    };
+
+
+
+    //distintas formas para obtener un servicio:
+
+    //primera forma (No recomendada)
+    // const service1 = (componentCar as any)._bookService;
+    // segunda forma (No recomendada)
+    // const service2 = componentCar["_bookService"];
+    // tercera forma (Super recomendada y Correcta)
+    // const service = fixture.debugElement.injector.get(BookService);
+
+     // así se hacia antes de Angular 9, por eso lo marca
+    // deprecated: @deprecated — from v9.0.0 use TestBed.inject
+    // const service3 = TestBed.get(BookService);
+
+    // para este metodo que no devuelve nada podriamos utilizar
+    // espias, los cuales comprueban si algunos metodos han sido
+    // llamados correctamente.
+
+    // le decimos los metodos que queremos espiar.
+
+     const spy1 = jest.spyOn(service, 'updateAmountBook').mockImplementation( () => null);
+     const spy2 = jest.spyOn(componentCar, 'getTotalPrice').mockImplementation( () => null ) ;
+     expect(myBook.amount).toBe(2);
+     componentCar.onInputNumberChange(action, myBook);
+     expect(myBook.amount).toBeGreaterThan(2);
+   // preguntamos a los espias si los metodos fueron llamados,
+   // mediante el expect.
+
+    expect(spy1).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+
+
+
+    // tambien podriamos hacer asi, para preguntar si por
+    // lo menos ha sido llamado una sola vez:
+    // expect(spy1).toHaveBeenCalledTimes(1) ;
+    // expect(spy2).toHaveBeenCalledTimes(1);
+  });
+
+
+
+  test('should test onInputTotalPrice decrement correctly', () => {
+    let action = 'minius';
+    const myBook: Book = {
+      id: "id4352",
+      name: "libro2",
+      author: "",
+      isbn: "isbn-prueba2",
+      description: "this description 2",
+      photoUrl: "http://myurl.com",
+      price: 20,
+      amount: 5
+    } ;
+
+
+
+
+    //distintas formas para obtener un servicio:
+
+    //primera forma (No recomendada)
+    // const service1 = (componentCar as any)._bookService;
+    // segunda forma (No recomendada)
+    // const service2 = componentCar["_bookService"];
+    // tercera forma (Super recomendada y Correcta)
+    // const service = fixture.debugElement.injector.get(BookService);
+
+     // así se hacia antes de Angular 9, por eso lo marca
+    // deprecated: @deprecated — from v9.0.0 use TestBed.inject
+    // const service3 = TestBed.get(BookService);
+
+      // para este metodo que no devuelve nada podriamos utilizar
+    // espias, los cuales comprueban si algunos metodos han sido
+    // llamados correctamente.
+
+    // le decimos los metodos que queremos espiar
+     const spy1 = jest.spyOn(service, 'updateAmountBook').mockImplementation( () => null);
+     const spy2 = jest.spyOn(componentCar, 'getTotalPrice').mockImplementation( () => null ) ;
+     expect(myBook.amount).toBe(5);
+     componentCar.onInputNumberChange(action, myBook);
+     expect(myBook.amount).toBe(4);
+   // preguntamos a los espias si los metodos fueron llamados,
+   // mediante el expect.
+
+
+
+    // tambien podriamos hacer asi, para preguntar si por
+    // lo menos ha sido llamado una sola vez:
+    expect(spy1).toHaveBeenCalledTimes(1) ;
+    expect(spy2).toHaveBeenCalledTimes(1);
+
+
+  });
 
 
 
