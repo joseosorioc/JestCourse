@@ -5,6 +5,41 @@ import { BookService } from "../../services/book.service";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/compiler";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { HttpClient, HttpHandler } from "@angular/common/http";
+import { Book } from "src/app/models/book.model";
+
+const listBookTest: Book[] = [{
+  id: "id1223",
+  name: "libro1",
+  author: "",
+  isbn: "isbn-prueba",
+  description: "this description",
+  photoUrl: "http://myurl.com",
+  price: 200,
+  amount: 2
+},
+{
+  id: "id4352",
+  name: "libro2",
+  author: "",
+  isbn: "isbn-prueba2",
+  description: "this description 2",
+  photoUrl: "http://myurl.com",
+  price: 20,
+  amount: 5
+},
+
+{
+  id: "id9987",
+  name: "libro3",
+  author: "",
+  isbn: "isbn-prueba3",
+  description: "this description 3",
+  photoUrl: "http://myurl.com",
+  price: 40,
+  amount: 10
+}
+
+]
 
 describe('Cart component', () => {
   let componentCar: CartComponent;
@@ -47,6 +82,20 @@ describe('Cart component', () => {
   it('should create component', () => {
      expect(componentCar).toBeTruthy();
   })
+
+
+  test('should test getTotalPrice return amount', () => {
+    let totalPrice = componentCar.getTotalPrice(listBookTest);
+
+    expect(totalPrice).toBeGreaterThan(0);
+
+  });
+
+
+
+
+
+
 
 });
 
