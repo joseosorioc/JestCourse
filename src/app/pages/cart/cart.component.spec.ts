@@ -75,7 +75,15 @@ describe('Cart component', () => {
     componentCar = fixture.componentInstance;
     fixture.detectChanges();
     service = fixture.debugElement.injector.get(BookService);
+    jest.spyOn(service, 'getBooksFromCart').mockImplementation( () => listBookTest);
   })
+
+  // se ejecuta despues que se ejecutan todos los tests.
+  afterEach( () => {
+    fixture.destroy();  // destruye el fixture.
+    jest.resetAllMocks(); // resetea los mocks.
+  })
+
 
   // first test
 
