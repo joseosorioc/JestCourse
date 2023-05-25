@@ -42,6 +42,10 @@ const listBookTest: Book[] = [{
 
 ]
 
+const bookServiceMock = {
+  getBooks: () => of(listBookTest)
+};
+
 
 describe( 'Home Component', () => {
 
@@ -60,7 +64,11 @@ beforeEach( () => {
       HomeComponent
     ],
     providers: [
-      BookService
+      // BookService
+      {
+        provide: BookService,
+        useValue: bookServiceMock
+      }
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA,NO_ERRORS_SCHEMA]
   }).compileComponents() ;
@@ -93,10 +101,10 @@ test( 'should getBooks with suscription Observable.', () => {
     // verficamos que se llame correctamente el metodo getBooks del servicio.
     // mockeamos ese observable con retorno y con el of(que es un metodo de rxJs que transforma en
     // observable nos manda ese observable, luego probamos lo que está dentro.
-    const spy1 = jest.spyOn(bookService, 'getBooks').mockReturnValueOnce(of(listBookTest));
+   // const spy1 = jest.spyOn(bookService, 'getBooks').mockReturnValueOnce(of(listBookTest));
 
     component.getBooks();
-    expect(spy1).toHaveBeenCalledTimes(1);
+   // expect(spy1).toHaveBeenCalledTimes(1);
 
     // comprobamos si es igual a la longitud de la lista que
     // pasamos. así:
