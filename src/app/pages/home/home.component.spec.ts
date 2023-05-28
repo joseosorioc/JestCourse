@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/compiler";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { HomeComponent } from "./home.component";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -46,6 +46,14 @@ const bookServiceMock = {
   getBooks: () => of(listBookTest)
 };
 
+// creamos el Pipe Test
+@Pipe({name: 'reduceText'})
+class ReduceTextPipeMock implements PipeTransform{
+  transform() : string {
+    return '';
+  }
+}
+
 
 describe( 'Home Component', () => {
 
@@ -61,7 +69,10 @@ beforeEach( () => {
       HttpClientTestingModule
     ],
     declarations: [
-      HomeComponent
+      HomeComponent,
+      ReduceTextPipeMock // Se añade el pipe.
+                         // A tener en cuenta: cada que se añada un pipe en el componente
+                         // se debe de añadir tambien en el Test
     ],
     providers: [
       // BookService
@@ -83,19 +94,12 @@ beforeEach( () => {
 });
 
 
+
 it('should test Homecomponent is created correctly' , () => {
     expect(component).toBeTruthy();
 });
 
-
-/**
- *   public getBooks(): void {
-    this.bookService.getBooks().pipe(take(1)).subscribe((resp: Book[]) => {
-      this.listBook = resp;
-    });
-  }
- */
-test( 'should getBooks with suscription Observable.', () => {
+it( 'should getBooks with suscription Observable.', () => {
     const bookService = fixture.debugElement.injector.get(BookService);
 
     // verficamos que se llame correctamente el metodo getBooks del servicio.
@@ -116,6 +120,37 @@ test( 'should getBooks with suscription Observable.', () => {
 });
 
 
+
+/**
+ *
+ * * El XIT: se agrega en las pruebas para saltarlas, ejemplo:
+ * xit( 'should getBooks with suscription Observable.', () => {
+    const bookService = fixture.debugElement.injector.get(BookService);
+    component.getBooks();
+    expect(component.listBook.length).toBe(3);
+    expect(component.listBook).toEqual(listBookTest);
+});
+
+  * El FIT: permite lanzar el test que está anotado con 'fit'
+    los demas no se lanzaran, ejemplo:
+
+    fit( 'should getBooks with suscription Observable.', () => {
+    const bookService = fixture.debugElement.injector.get(BookService);
+    component.getBooks();
+    expect(component.listBook.length).toBe(3);
+    expect(component.listBook).toEqual(listBookTest);
+
+  * it.only: es exactamente lo mismo que fit. ejemplo:
+
+    fit.only( 'should getBooks with suscription Observable.', () => {
+    const bookService = fixture.debugElement.injector.get(BookService);
+    component.getBooks();
+    expect(component.listBook.length).toBe(3);
+    expect(component.listBook).toEqual(listBookTest);
+
+});
+
+**/
 
 
 
